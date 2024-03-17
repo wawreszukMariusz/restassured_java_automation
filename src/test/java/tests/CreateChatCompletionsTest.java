@@ -2,6 +2,7 @@ package tests;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 import java.util.*;
@@ -32,12 +33,12 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .post().
                 then()
                     .statusCode(200)
-                    .contentType(ContentType.JSON)
+                    .spec(resSpec)
                     .body(matchesJsonSchemaInClasspath("schemas/chatCompletionSchema.json"))
                     .extract().response();
 
         assertEquals(response.path("choices[0].finish_reason"), "stop");
-        assertEquals(response.path("message[0].role"), "assistant"); // TODO
+        assertEquals(response.path("choices[0].message.role"), "assistant");
         assertEquals(response.path("model"), "gpt-3.5-turbo-0125");
     }
 
@@ -61,12 +62,12 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .post().
                 then()
                     .statusCode(400)
-                    .contentType(ContentType.JSON)
+                    .spec(resSpec)
                     .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
                     .extract().response();
 
         assertEquals(response.path("error.message"), "This model's maximum context length is 16385 tokens. However, your messages resulted in 21269 tokens. Please reduce the length of the messages.");
-        assertEquals(response.path("error.type"), "invalid_request_error"); // TODO
+        assertEquals(response.path("error.type"), "invalid_request_error");
         assertEquals(response.path("error.param"), "messages");
         assertEquals(response.path("error.code"), "context_length_exceeded");
     }
@@ -88,17 +89,17 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .post().
                 then()
                     .statusCode(200)
-                    .contentType(ContentType.JSON)
+                    .spec(resSpec)
                     .body(matchesJsonSchemaInClasspath("schemas/chatCompletionSchema.json"))
                     .extract().response();
 
         assertEquals(response.path("choices[0].finish_reason"), "stop");
-        assertEquals(response.path("message[0].role"), "assistant"); // TODO
+        assertEquals(response.path("choices[0].message.role"), "assistant");
         assertEquals(response.path("message[0].content"), "Hello! How can I assist you today?");
     }
 
     @Test
-    public void createChatCompletionForNewChatModelWithoutPermission() {
+    public void createChatCompletionForNewChatModelWithoutPermissionTest() {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("system", "Test"));
         messages.add(new Message("user", "Tester"));
@@ -114,7 +115,7 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .post("https://api.openai.com/v1/chat/completions").
                 then()
                     .statusCode(404)
-                    .contentType(ContentType.JSON)
+                    .spec(resSpec)
                     .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
                     .extract().response();
 
@@ -125,7 +126,7 @@ public class CreateChatCompletionsTest extends BaseTest{
     }
 
     @Test
-    public void createChatCompletionWithUnfavorableMessage() {
+    public void createChatCompletionWithUnfavorableMessageTest() {
         List<Message> messages = new ArrayList<>();
         messages.add(new Message("system", "Test"));
         messages.add(new Message("user", "What do you think about programming in Java?"));
@@ -141,13 +142,66 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .post("https://api.openai.com/v1/chat/completions").
                 then()
                     .statusCode(200)
-                    .contentType(ContentType.JSON)
+                    .spec(resSpec)
                     .body(matchesJsonSchemaInClasspath("schemas/chatCompletionSchema.json")).
                 and()
                     .body(Matchers.containsString("I don't have personal opinions"))
                     .extract().response();
 
         assertEquals(response.path("choices[0].finish_reason"), "stop");
-        assertEquals(response.path("message[0].role"), "assistant"); // TODO
+        assertEquals(response.path("choices[0].message.role"), "assistant");
+    }
+
+    @Test
+    public void createChatCompletionWithTranslationRequestTest() {
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message("system", "Test"));
+        messages.add(new Message("user", "Translate the following English text to French: Ben has a cat"));
+
+        ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
+
+        Response response =
+                given()
+                        .spec(reqSpec)
+                        .basePath("v1/chat/completions")
+                        .body(chatCompletion).
+                when()
+                        .post("https://api.openai.com/v1/chat/completions").
+                then()
+                        .spec(resSpec)
+                        .statusCode(200)
+                        .body(matchesJsonSchemaInClasspath("schemas/chatCompletionSchema.json"))
+                        .extract().response();
+
+        assertEquals(response.path("choices[0].finish_reason"), "stop");
+        assertEquals(response.path("choices[0].message.role"), "assistant");
+        assertEquals(response.path("choices[0].message.content"), "Ben a un chat");
+    }
+
+    @Test
+    public void checkBasicMathAbilityTest() {
+        List<Message> messages = new ArrayList<>();
+        messages.add(new Message("system", "Test"));
+        messages.add(new Message("user", "How much will it be: 2+2*2"));
+
+        ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
+
+        Response response =
+                given()
+                        .spec(reqSpec)
+                        .basePath("v1/chat/completions")
+                        .body(chatCompletion).
+                when()
+                        .post("https://api.openai.com/v1/chat/completions").
+                then()
+                        .statusCode(200)
+                        .contentType(ContentType.JSON)
+                        .body(matchesJsonSchemaInClasspath("schemas/chatCompletionSchema.json")).
+                and()
+                        .body(Matchers.containsString("is 6"))
+                        .extract().response();
+
+        assertEquals(response.path("choices[0].finish_reason"), "stop");
+        assertEquals(response.path("choices[0].message.role"), "assistant");
     }
 }
