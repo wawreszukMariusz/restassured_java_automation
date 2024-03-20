@@ -1,0 +1,295 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "object": {
+      "type": "string"
+    },
+    "data": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "object": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "bytes": {
+              "type": "integer"
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string"
+            },
+            "status_details": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "object",
+            "id",
+            "purpose",
+            "filename",
+            "bytes",
+            "created_at",
+            "status",
+            "status_details"
+          ]
+        }
+      ]
+    },
+    "has_more": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "object",
+    "data",
+    "has_more"
+  ]
+}

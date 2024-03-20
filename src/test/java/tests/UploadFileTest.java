@@ -2,6 +2,7 @@ package tests;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.MultiPartSpecBuilder;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
@@ -10,7 +11,7 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.testng.Assert.assertNull;
 import static org.testng.AssertJUnit.assertEquals;
 
-public class UploadFile extends BaseTest{
+public class UploadFileTest extends BaseTest{
 
     @Test
     public void uploadTxtFileTest() {
@@ -132,4 +133,89 @@ public class UploadFile extends BaseTest{
         assertNull(response.path("error.param"));
         assertNull(response.path("error.code"));
     }
+
+    @Test
+    public void uploadFileNotProvidedTest() {
+
+        Response response = RestAssured.
+                given()
+                .spec(reqSpec)
+                .basePath("v1/files")
+                .multiPart("purpose", "assistants")
+                .contentType("multipart/form-data").
+                when()
+                .post().
+                then()
+                .statusCode(400)
+                .spec(resSpec)
+                .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
+                .extract().response();
+
+        assertEquals(response.path("error.message"), "'file' is a required property");
+        assertEquals(response.path("error.type"), "invalid_request_error");
+        assertNull(response.path("error.param"));
+        assertNull(response.path("error.code"));
+    }
+
+    @Test
+    public void uploadPurposeNotProvidedTest() {
+        File file = new File("src/test/resources/files/batFile.bat");
+
+        MultiPartSpecBuilder multiPartSpecBuilder = new MultiPartSpecBuilder(file)
+                .controlName("file")
+                .fileName("batFile.bat")
+                .mimeType("multipart/form-data");
+
+        Response response = RestAssured.
+                given()
+                .spec(reqSpec)
+                .basePath("v1/files")
+                .multiPart(multiPartSpecBuilder.build())
+                .contentType("multipart/form-data").
+                when()
+                .post().
+                then()
+                .statusCode(400)
+                .spec(resSpec)
+                .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
+                .extract().response();
+
+        assertEquals(response.path("error.message"), "'purpose' is a required property");
+        assertEquals(response.path("error.type"), "invalid_request_error");
+        assertNull(response.path("error.param"));
+        assertNull(response.path("error.code"));
+    }
+
+    @Test
+    public void uploadWithoutAuthTest() {
+        File file = new File("src/test/resources/files/batFile.bat");
+
+        MultiPartSpecBuilder multiPartSpecBuilder = new MultiPartSpecBuilder(file)
+                .controlName("file")
+                .fileName("batFile.bat")
+                .mimeType("multipart/form-data");
+
+        Response response = RestAssured.
+                given()
+                .baseUri("https://api.openai.com/")
+                .basePath("v1/files")
+                .contentType(ContentType.JSON)
+                .multiPart(multiPartSpecBuilder.build())
+                .contentType("multipart/form-data").
+                when()
+                .post().
+                then()
+                .statusCode(401)
+                .spec(resSpec)
+                .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
+                .and()
+                .body(Matchers.containsString("You didn't provide an API key."))
+                .extract().response();
+
+        assertEquals(response.path("error.type"), "invalid_request_error");
+        assertNull(response.path("error.param"));
+        assertNull(response.path("error.code"));
+    }
+
+
 }
