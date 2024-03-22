@@ -23,7 +23,7 @@ public class DeleteFileTest extends BaseTest{
                 .fileName("jsonFile.json")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        Response uploadResponse = RestAssured.
                 given()
                 .spec(reqSpec)
                 .basePath("v1/files")
@@ -37,13 +37,13 @@ public class DeleteFileTest extends BaseTest{
                 .spec(resSpec)
                 .body(matchesJsonSchemaInClasspath("schemas/uploadFileSchema.json")).extract().response();
 
-        assertEquals(response.path("object"), "file");
-        assertEquals(response.path("purpose"), "assistants");
-        assertEquals(response.path("filename"), "jsonFile.json");
-        assertEquals(response.path("status"), "processed");
-        assertNull(response.path("status_details"));
+        assertEquals(uploadResponse.path("object"), "file");
+        assertEquals(uploadResponse.path("purpose"), "assistants");
+        assertEquals(uploadResponse.path("filename"), "jsonFile.json");
+        assertEquals(uploadResponse.path("status"), "processed");
+        assertNull(uploadResponse.path("status_details"));
 
-        String fileId = response.path("id").toString();
+        String fileId = uploadResponse.path("id").toString();
 
         Response deleteResponse =
                 given()
