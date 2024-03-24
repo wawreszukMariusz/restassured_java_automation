@@ -15,14 +15,14 @@ public class UploadFileTest extends BaseTest{
 
     @Test
     public void uploadTxtFileTest() {
-            File file = new File("src/test/resources/files/uploadFile.txt");
+            File file = new File("src/test/resources/files/txtFile.txt");
 
             MultiPartSpecBuilder multiPartSpecBuilder = new MultiPartSpecBuilder(file)
                     .controlName("file")
                     .fileName("txtFile.txt")
                     .mimeType("multipart/form-data");
 
-            Response response = RestAssured.
+            response = RestAssured.
                     given()
                         .spec(reqSpec)
                         .basePath("v1/files")
@@ -52,7 +52,7 @@ public class UploadFileTest extends BaseTest{
                 .fileName("jsonFile.json")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                     .spec(reqSpec)
                     .basePath("v1/files")
@@ -82,7 +82,7 @@ public class UploadFileTest extends BaseTest{
                 .fileName("htmlFile.html")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                     .spec(reqSpec)
                     .basePath("v1/files")
@@ -112,7 +112,7 @@ public class UploadFileTest extends BaseTest{
                 .fileName("batFile.bat")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                     .spec(reqSpec)
                     .basePath("v1/files")
@@ -137,7 +137,7 @@ public class UploadFileTest extends BaseTest{
     @Test
     public void uploadFileNotProvidedTest() {
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                 .spec(reqSpec)
                 .basePath("v1/files")
@@ -166,7 +166,7 @@ public class UploadFileTest extends BaseTest{
                 .fileName("batFile.bat")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                 .spec(reqSpec)
                 .basePath("v1/files")
@@ -195,7 +195,7 @@ public class UploadFileTest extends BaseTest{
                 .fileName("batFile.bat")
                 .mimeType("multipart/form-data");
 
-        Response response = RestAssured.
+        response = RestAssured.
                 given()
                 .baseUri("https://api.openai.com/")
                 .basePath("v1/files")

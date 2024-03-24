@@ -4,10 +4,7 @@ import io.restassured.RestAssured;
 import io.restassured.builder.MultiPartSpecBuilder;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
 import java.io.File;
-import java.util.Optional;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.testng.AssertJUnit.*;
@@ -25,17 +22,17 @@ public class DeleteFileTest extends BaseTest{
 
         Response uploadResponse = RestAssured.
                 given()
-                .spec(reqSpec)
-                .basePath("v1/files")
-                .multiPart(multiPartSpecBuilder.build())
-                .multiPart("purpose", "assistants")
-                .contentType("multipart/form-data").
+                    .spec(reqSpec)
+                    .basePath("v1/files")
+                    .multiPart(multiPartSpecBuilder.build())
+                    .multiPart("purpose", "assistants")
+                    .contentType("multipart/form-data").
                 when()
-                .post().
+                    .post().
                 then()
-                .statusCode(200)
-                .spec(resSpec)
-                .body(matchesJsonSchemaInClasspath("schemas/uploadFileSchema.json")).extract().response();
+                    .statusCode(200)
+                    .spec(resSpec)
+                    .body(matchesJsonSchemaInClasspath("schemas/uploadFileSchema.json")).extract().response();
 
         assertEquals(uploadResponse.path("object"), "file");
         assertEquals(uploadResponse.path("purpose"), "assistants");
@@ -45,32 +42,32 @@ public class DeleteFileTest extends BaseTest{
 
         String fileId = uploadResponse.path("id").toString();
 
-        Response deleteResponse =
+        response =
                 given()
                         .spec(reqSpec)
                         .pathParam("file_id", fileId).
-                        when()
+                when()
                         .delete("/v1/files/{file_id}").
-                        then()
+                then()
                         .statusCode(200)
                         .spec(resSpec)
                         .body(matchesJsonSchemaInClasspath("schemas/deleteFileSchema.json"))
                         .extract().response();
 
-        assertEquals(deleteResponse.path("object"), "file");
-        assertTrue(deleteResponse.path("deleted"));
-        assertEquals(deleteResponse.path("id"), fileId);
+        assertEquals(response.path("object"), "file");
+        assertTrue(response.path("deleted"));
+        assertEquals(response.path("id"), fileId);
     }
 
     @Test
     public void deleteNotExistingFileTest() {
-        Response response =
+        response =
                 given()
                         .spec(reqSpec)
                         .pathParam("file_id", "test").
-                        when()
+                when()
                         .delete("/v1/files/{file_id}").
-                        then()
+                then()
                         .statusCode(404)
                         .spec(resSpec)
                         .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))

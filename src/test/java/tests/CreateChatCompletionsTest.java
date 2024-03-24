@@ -2,13 +2,14 @@ package tests;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 import java.util.*;
 import model.Message;
 import model.ChatCompletionRequest;
 import utils.Helper;
+import utils.RestUtils;
+
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.testng.AssertJUnit.assertEquals;
@@ -24,7 +25,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                     .spec(reqSpec)
                     .basePath("v1/chat/completions")
@@ -53,7 +54,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                     .spec(reqSpec)
                     .basePath("v1/chat/completions")
@@ -80,7 +81,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                     .spec(reqSpec)
                     .basePath("v1/chat/completions")
@@ -95,7 +96,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         assertEquals(response.path("choices[0].finish_reason"), "stop");
         assertEquals(response.path("choices[0].message.role"), "assistant");
-        assertEquals(response.path("message[0].content"), "Hello! How can I assist you today?");
+        assertEquals(response.path("choices[0].message.content"), "Hello! How can I assist you today?");
     }
 
     @Test
@@ -106,7 +107,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-4-turbo-preview");
 
-        Response response =
+        response =
                 given()
                     .spec(reqSpec)
                     .basePath("v1/chat/completions")
@@ -119,7 +120,7 @@ public class CreateChatCompletionsTest extends BaseTest{
                     .body(matchesJsonSchemaInClasspath("schemas/errorSchema.json"))
                     .extract().response();
 
-        assertEquals(response.path("error.message"), "The model `gpt-4-turbo-preview` does not exist or you do not have access to it. Learn more: https://help.openai.com/en/articles/7102672-how-can-i-access-gpt-4.");
+        assertEquals(response.path("error.message"), "The model `gpt-4-turbo-preview` does not exist or you do not have access to it.");
         assertEquals(response.path("error.type"), "invalid_request_error");
         assertNull(response.path("error.param"));
         assertEquals(response.path("error.code"), "model_not_found");
@@ -133,7 +134,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                     .spec(reqSpec)
                     .basePath("v1/chat/completions")
@@ -160,7 +161,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                         .spec(reqSpec)
                         .basePath("v1/chat/completions")
@@ -186,7 +187,7 @@ public class CreateChatCompletionsTest extends BaseTest{
 
         ChatCompletionRequest chatCompletion = new ChatCompletionRequest(messages, "gpt-3.5-turbo-0125");
 
-        Response response =
+        response =
                 given()
                         .spec(reqSpec)
                         .basePath("v1/chat/completions")

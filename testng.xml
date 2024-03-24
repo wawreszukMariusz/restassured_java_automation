@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <listeners>
+        <listener class-name="reporting.Setup"></listener>
+    </listeners>
+    <test verbose="1" preserve-order="true" name="C:/github-repos/restassured_java_automation">
+        <classes><class name="tests.CreateChatCompletionsTest">
+            <methods><include name="createChatCompletionTest"/>
+                <include name="tooLongMessageTest"/>
+                <include name="emptyMessageProvidedTest"/>
+                <include name="createChatCompletionForNewChatModelWithoutPermissionTest"/>
+                <include name="createChatCompletionWithUnfavorableMessageTest"/>
+                <include name="createChatCompletionWithTranslationRequestTest"/>
+                <include name="checkBasicMathAbilityTest"/>
+            </methods>
+        </class>
+            <class name="tests.CreateImageTest">
+                <methods><include name="Create image test"/>
+                    <include name="createSingleImageTest"/>
+                    <include name="createTwoImagesTest"/>
+                </methods></class>
+            <class name="tests.DeleteFileTest">
+                <methods>
+                    <include name="deleteFileTest"/>
+                    <include name="deleteNotExistingFileTest"/>
+                </methods>
+            </class>
+            <class name="tests.ListFilesTest">
+                <methods><include name="List files test"/>
+                    <include name="getFilesListTest"/>
+                    <include name="getFilesListWithAssistantsPurpose"/>
+                    <include name="getFilesListWithEmptyListPurpose"/>
+                    <include name="getFilesListWithNotExistingPurpose"/>
+                </methods></class><class name="tests.RetrieveFileTest">
+                <methods><include name="retrieveFileTest"/>
+                    <include name="retrieveNotExistingFileTest"/>
+                </methods>
+            </class>
+            <class name="tests.UploadFileTest">
+                <methods><include name="Upload file test"/>
+                    <include name="uploadTxtFileTest"/>
+                    <include name="uploadJsonFileTest"/>
+                    <include name="uploadHtmlFile"/>
+                    <include name="uploadUnsupportedFileTest"/>
+                    <include name="uploadFileNotProvidedTest"/>
+                    <include name="uploadPurposeNotProvidedTest"/>
+                    <include name="uploadWithoutAuthTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
